@@ -1,0 +1,5 @@
+This is a file to keep track of our results as they are generated
+
+Model           |    Learning Rate  |    Dataset    |   Momentum    |    Optimizer  |   BN MAF  |   Iterations  |   Batch Size  |   Accuracy
+--------------------------------------------------------------------------------------------------------------------------------------------
+ResNet-56       |    PC-LR=0.35     |   cifar-10    |   0.9         |   SGD         |   0.999   |   80k         |

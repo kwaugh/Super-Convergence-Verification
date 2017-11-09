@@ -12,10 +12,12 @@ import dataprovider
 import multithread_generator
 import ops
 
+import resnet
+
 slim = tf.contrib.slim
 
 
-class SunNetRunner(object):
+class ResNetRunner(object):
     def __init__(self, save_path, num_classes,
                  x_op=None, labels_op=None, is_training_op=None,
                  tree_path=None):
@@ -53,7 +55,7 @@ class SunNetRunner(object):
 
             models = [
                     # SunNet.feed_forward(input_op, num_classes, is_training_op)
-                    SunNet.feed_forward_vgg(vgg, num_classes, is_training_op, 'conv4_1')
+                    ResNet.feed_forward_vgg(vgg, num_classes, is_training_op, 'conv4_1')
                     # SunNet.feed_forward_alexnet(input_op, num_classes, is_training_op)
                     # SunNet.feed_forward_vgg16(input_op, num_classes, is_training_op)
                     ]
@@ -121,72 +123,10 @@ class SunNetRunner(object):
 
         return pred, prob
 
-class SunNet(object):
-    def feed_forward(x_op, num_classes, is_training_op, scope='SunNet'):
-        net = x_op
-
-        with tf.variable_scope(scope):
-            net = ops.down_block(net, 32, is_training_op, 'block1')
-            net = ops.down_block(net, 32, is_training_op, 'block2')
-            net = ops.down_block(net, 64, is_training_op, 'block3')
-            net = ops.down_block(net, 64, is_training_op, 'block4')
-            net = ops.flatten(net)
-            net = ops.dense_block(net, 64, is_training_op, 'block5')
-            net = ops.dense_block(net, 64, is_training_op, 'block6')
-            net = ops.dense_block(net, num_classes, is_training_op, 'block7',
-                    activation=False)
-
-        with tf.name_scope('predictions'):
-            prob_op = tf.nn.softmax(net)
-            pred_op = tf.cast(tf.argmax(tf.nn.softmax(net), axis=-1), tf.int32)
-
-        return pred_op, net, prob_op
-
-    def feed_forward_alexnet(x_op, num_classes, is_training_op, scope='SunNet'):
-        with tf.variable_scope(scope):
-            net, _ = alexnet.alexnet_v2(x_op, num_classes, is_training_op,
-                    dropout_keep_prob=0.5, spatial_squeeze=True)
-
-        with tf.name_scope('predictions'):
-            prob_op = tf.nn.softmax(net)
-            pred_op = tf.cast(tf.argmax(tf.nn.softmax(net), axis=-1), tf.int32)
-
-        return pred_op, net, prob_op
-
-    def feed_forward_vgg16(x_op, num_classes, is_training_op, scope='SunNet'):
-        with tf.variable_scope(scope):
-            net, _ = vgg.vgg_16(x_op, num_classes, is_training_op,
-                    dropout_keep_prob=0.5, spatial_squeeze=True)
-
-        with tf.name_scope('predictions'):
-            prob_op = tf.nn.softmax(net)
-            pred_op = tf.cast(tf.argmax(tf.nn.softmax(net), axis=-1), tf.int32)
-
-        return pred_op, net, prob_op
-
-    def feed_forward_vgg(vgg_activations, num_classes, is_training_op, layer,
-                         scope='SunNet'):
-        with tf.variable_scope('SunNet/%s' % scope):
-            net = vgg_activations[layer]
-
-            net = ops.flatten(net)
-            net = ops.batch_norm(net, is_training_op)
-            net = ops.dropout(net, is_training_op)
-            net = ops.dense_block(net, 128, is_training_op, 'block1')
-            net = ops.dense_block(net, 128, is_training_op, 'block2')
-            net = ops.dense_block(net, num_classes, is_training_op, 'block3', False)
-
-            net = ops.dropout(net, is_training_op, 0.2)
-
-            net = tf.expand_dims(net, axis=2)
-            net = ops.conv1d(net, 1, 5)
-            net = tf.squeeze(net)
-
-        with tf.name_scope('predictions'):
-            prob_op = tf.nn.softmax(net)
-            pred_op = tf.cast(tf.argmax(prob_op, axis=-1), tf.int32)
-
-        return pred_op, net, prob_op
+class Net(object):
+    def resnet56(x_op, num_classes, is_training_op, scope):
+       net = resnet.cifar10_resnet_v2_generator(56, num_classes)
+       return net
 
     def get_loss_op(logits_op, labels_op, alpha=5e-7, beta=5.0):
         with tf.name_scope('loss'):
