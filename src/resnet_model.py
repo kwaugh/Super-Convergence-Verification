@@ -34,7 +34,7 @@ from __future__ import print_function
 
 import tensorflow as tf
 
-_BATCH_NORM_DECAY = 0.997
+_BATCH_NORM_DECAY = 0.999
 _BATCH_NORM_EPSILON = 1e-5
 
 

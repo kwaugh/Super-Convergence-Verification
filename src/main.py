@@ -25,6 +25,7 @@ import sys
 import tensorflow as tf
 
 import resnet_model
+import clr_callback
 
 parser = argparse.ArgumentParser()
 
@@ -38,7 +39,7 @@ parser.add_argument('--model_dir', type=str, default='./model/',
 parser.add_argument('--resnet_size', type=int, default=56,
                     help='The size of the ResNet model to use.')
 
-parser.add_argument('--train_epochs', type=int, default=250,
+parser.add_argument('--train_epochs', type=int, default=1600,
                     help='The number of epochs to train.')
 
 parser.add_argument('--epochs_per_eval', type=int, default=10,
@@ -65,6 +66,12 @@ _NUM_DATA_FILES = 5
 # was originally suggested.
 _WEIGHT_DECAY = 2e-4
 _MOMENTUM = 0.9
+# used for CLR
+_MIN_LEARNING_RATE = 0.1
+_MAX_LEARNING_RATE = 3.0
+# used for PC-LR
+_INITIAL_LEARNING_RATE = 0.35
+_STEP_SIZE = 10000
 
 _NUM_IMAGES = {
     'train': 50000,
@@ -213,15 +220,18 @@ def cifar10_model_fn(features, labels, mode, params):
   if mode == tf.estimator.ModeKeys.TRAIN:
     # Scale the learning rate linearly with the batch size. When the batch size
     # is 128, the learning rate should be 0.1.
-    initial_learning_rate = 0.1 * params['batch_size'] / 128
+    initial_learning_rate = _INITIAL_LEARNING_RATE
     batches_per_epoch = _NUM_IMAGES['train'] / params['batch_size']
     global_step = tf.train.get_or_create_global_step()
 
     # Multiply the learning rate by 0.1 at 100, 150, and 200 epochs.
-    boundaries = [int(batches_per_epoch * epoch) for epoch in [100, 150, 200]]
-    values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001]]
+    boundaries = [int(batches_per_epoch * epoch) for epoch in [100, 200, 400, 800]]
+    values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
     learning_rate = tf.train.piecewise_constant(
         tf.cast(global_step, tf.int32), boundaries, values)
+    # learning_rate = clr_callback.CyclicLR(base_lr=_MIN_LEARNING_RATE,
+    #         max_lr=_MAX_LEARNING_RATE, step_size=_STEP_SIZE)
+    # learning_rate = learning_rate.clr()
 
     # Create a tensor named learning_rate for logging purposes
     tf.identity(learning_rate, name='learning_rate')
