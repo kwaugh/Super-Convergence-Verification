@@ -60,7 +60,7 @@ _HEIGHT = 32
 _WIDTH = 32
 _DEPTH = 3
 _NUM_CLASSES = 10
-_NUM_DATA_FILES = 5
+_NUM_DATA_FILES = 4
 
 # We use a weight decay of 0.0002, which performs better than the 0.0001 that
 # was originally suggested.
@@ -74,7 +74,7 @@ _INITIAL_LEARNING_RATE = 0.35
 _STEP_SIZE = 10000
 
 _NUM_IMAGES = {
-    'train': 50000,
+    'train': 40000,
     'validation': 10000,
 }
 
@@ -225,7 +225,7 @@ def cifar10_model_fn(features, labels, mode, params):
     global_step = tf.train.get_or_create_global_step()
 
     # Multiply the learning rate by 0.1 at 100, 150, and 200 epochs.
-    boundaries = [int(batches_per_epoch * epoch) for epoch in [100, 200, 400, 800]]
+    boundaries = [int(batches_per_epoch * epoch) for epoch in [40, 100, 200, 800]]
     values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
     learning_rate = tf.train.piecewise_constant(
         tf.cast(global_step, tf.int32), boundaries, values)
