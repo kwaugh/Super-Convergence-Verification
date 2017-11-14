@@ -17,7 +17,7 @@ import resnet
 slim = tf.contrib.slim
 
 
-class ResNetRunner(object):
+class NetRunner(object):
     def __init__(self, save_path, num_classes,
                  x_op=None, labels_op=None, is_training_op=None,
                  tree_path=None):
@@ -51,13 +51,14 @@ class ResNetRunner(object):
 
     def _build(self, input_op, num_classes, is_training_op, reuse=False):
         with tf.variable_scope(tf.get_variable_scope(), reuse=reuse):
-            vgg = vgg19.VGG19('imagenet-vgg-verydeep-19.mat').feed_forward(input_op)
+            # vgg = vgg19.VGG19('imagenet-vgg-verydeep-19.mat').feed_forward(input_op)
 
             models = [
-                    # SunNet.feed_forward(input_op, num_classes, is_training_op)
-                    ResNet.feed_forward_vgg(vgg, num_classes, is_training_op, 'conv4_1')
-                    # SunNet.feed_forward_alexnet(input_op, num_classes, is_training_op)
-                    # SunNet.feed_forward_vgg16(input_op, num_classes, is_training_op)
+                    # Net.feed_forward(input_op, num_classes, is_training_op)
+                    # ResNet.feed_forward_vgg(vgg, num_classes, is_training_op, 'conv4_1')
+                    Net.resnet56(input_op, num_classes, is_training_op, 'Net')
+                    # Net.feed_forward_alexnet(input_op, num_classes, is_training_op)
+                    # Net.feed_forward_vgg16(input_op, num_classes, is_training_op)
                     ]
 
         # Average the predictions.
@@ -79,7 +80,7 @@ class ResNetRunner(object):
 
         for _, logits_op, _ in models:
             losses.append(
-                    SunNet.get_loss_op(
+                    Net.get_loss_op(
                         logits_op, labels_op))
             loss_op += losses[-1]
 
@@ -90,7 +91,7 @@ class ResNetRunner(object):
             sess = tf.Session()
             self.sess = sess
 
-        saved_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'SunNet')
+        saved_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'Net')
         saved_vars += tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'training')
 
         saved_vars_dict = {key.name: key for key in saved_vars}
@@ -125,8 +126,9 @@ class ResNetRunner(object):
 
 class Net(object):
     def resnet56(x_op, num_classes, is_training_op, scope):
-       net = resnet.cifar10_resnet_v2_generator(56, num_classes)
-       return net
+       model_func = resnet.cifar10_resnet_v2_generator(56, num_classes)
+       pred_op, net, prob_op = model_func(x_op, is_training_op)
+       return pred_op, net, prob_op
 
     def get_loss_op(logits_op, labels_op, alpha=5e-7, beta=5.0):
         with tf.name_scope('loss'):
@@ -140,9 +142,9 @@ class Net(object):
 
     def get_runners(input_shape, num_classes):
         datagen_train = dataprovider.SparseDatagen(
-                config.trainImNames, input_shape, num_classes, True)
+                True, input_shape, num_classes, augment_data=True)
         datagen_valid = dataprovider.SparseDatagen(
-                config.test1ImNames, input_shape, num_classes, False)
+                False, input_shape, num_classes, augment_data=False)
 
         runner_train = multithread_generator.AsyncRunner(
                 datagen_train, 'train_generator')

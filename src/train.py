@@ -15,14 +15,14 @@ slim = tf.contrib.slim
 
 
 def get_train_op(loss_op, train_vars):
-    bounds = [50000, 100000]
-    values = [2e-2, 1e-2, 1e-3]
+    bounds = [20000, 40000, 60000]
+    values = [0.35, 0.035, 0.0035, 0.00035]
 
     with tf.variable_scope('training'):
         step_op = tf.Variable(0, name='step', trainable=False)
 
         learn_rate_op = tf.train.piecewise_constant(step_op, bounds, values)
-        optimizer_op = tf.train.AdamOptimizer(learn_rate_op)
+        optimizer_op = tf.train.MomentumOptimizer(learn_rate_op, momentum=0.9)
 
         with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
             grad_var_op = optimizer_op.compute_gradients(
@@ -49,7 +49,6 @@ def get_inputs(runner_train, runner_valid, batch_size):
 
 def load_checkpoint(sess, checkpoint, scope):
     slim.assign_from_checkpoint_fn(checkpoint, slim.get_model_variables(scope))(sess)
-
 
 def train_loop(runner_train, runner_valid,
                step_op, train_op, summary_op, is_training_op,
@@ -114,7 +113,7 @@ def train_loop(runner_train, runner_valid,
 def main():
     save_path = os.path.join(config.log_dir, config.model_name)
 
-    runner_train, runner_valid = model.SunNet.get_runners(
+    runner_train, runner_valid = model.Net.get_runners(
             config.input_shape, config.num_classes)
 
     is_training_op, (images_op, labels_op) = get_inputs(
@@ -129,14 +128,14 @@ def main():
                         # lambda: images_op,
                         # lambda: images_op)
 
-    network = model.SunNetRunner(save_path, config.num_classes,
+    network = model.NetRunner(save_path, config.num_classes,
                                     images_op, labels_op, is_training_op)
 
     loss_op = network.loss_op
     pred_op = network.pred_op
 
     # Used for saving and gradient descent.
-    train_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'SunNet')
+    train_vars = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, 'Net')
 
     print('Weights to be trained.')
     print('\n'.join(sorted(map(lambda x: x.name, train_vars))))
@@ -145,13 +144,13 @@ def main():
     train_op, learn_rate_op, step_op, grad_var_op = get_train_op(loss_op, train_vars)
 
     # Includes moving averages and such.
-    saved_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'SunNet')
+    saved_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'Net')
     saved_vars += tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, 'training')
 
     print('Weights to be saved.')
     print('\n'.join(sorted(map(lambda x: x.name, saved_vars))))
 
-    summary_op = model.SunNet.get_summaries(
+    summary_op = model.Net.get_summaries(
             images_op, labels_op, pred_op,
             config.num_classes, learn_rate_op, loss_op,
             grad_var_op, is_training_op, network)

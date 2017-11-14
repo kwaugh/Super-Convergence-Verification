@@ -273,7 +273,9 @@ def cifar10_resnet_v2_generator(resnet_size, num_classes, data_format=None):
     inputs = tf.reshape(inputs, [-1, 64])
     inputs = tf.layers.dense(inputs=inputs, units=num_classes)
     inputs = tf.identity(inputs, 'final_dense')
-    return inputs
+    prob_op = tf.nn.softmax(inputs)
+    pred_op = tf.cast(tf.argmax(prob_op, axis=-1), tf.int32)
+    return pred_op, inputs, prob_op
 
   return model
 
