@@ -1,11 +1,15 @@
 This is a file to keep track of our results as they are generated
 
-Model       | Learning Rate | Dataset   | Momentum | Optimizer | BN MAF | Iters | B.S | Accuracy | Samples |
+Model       | Learning Rate | Dataset   | Momentum | Optimizer | BN MAF | Iters | B.S. | Accuracy | Samples |
 ------------------------------------------------------------------------------------------------------------
-ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256 | 0.9369   | 50k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9369   | 50k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9189   | 40k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9001   | 30k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.8670   | 20k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.8167   | 10k     |
 
 
-* B.S = Batch Size
+* B.S. = Batch Size
 
 
 I'm assuming that they used 1000 batch size for their tests because that's how the got the best results.
