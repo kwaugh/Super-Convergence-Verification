@@ -91,8 +91,23 @@ def get_samples(images, input_shape):
     w, h, c = input_shape
     num_ims = len(images)
     ims = np.zeros((num_ims, w, h, c))
+    # from PIL import Image
     for i in range(num_ims):
+        # stack the channels manually
+        # for d in range(3):
+        #     for r in range(32):
+        #         for c in range(32):
+        #             ims[i, r, c, d] = images[i][1024*d + 32*r + c]
+
+        # ims[i, :, :, 0] = np.reshape(images[i][0:1024], (32, 32)) # red
+        # ims[i, :, :, 1] = np.reshape(images[i][1024:2048], (32, 32)) # green
+        # ims[i, :, :, 2] = np.reshape(images[i][2048:], (32, 32)) # blue
         ims[i] = np.reshape(images[i], tuple(input_shape))
+        # print('equal:', ims[i, :, :, :] == test)
+        # TODO: this doesn't look right when displayed
+        # img = Image.fromarray(ims[i], 'RGB')
+        # img.show()
+        # input('Press a key')
     return ims
 
 class Datagen(object):

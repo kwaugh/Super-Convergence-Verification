@@ -126,9 +126,10 @@ class NetRunner(object):
 
 class Net(object):
     def resnet56(x_op, num_classes, is_training_op, scope):
-       model_func = resnet.cifar10_resnet_v2_generator(56, num_classes)
-       pred_op, net, prob_op = model_func(x_op, is_training_op)
-       return pred_op, net, prob_op
+        with tf.variable_scope(scope):
+            model_func = resnet.cifar10_resnet_v2_generator(56, num_classes)
+            pred_op, net, prob_op = model_func(x_op, is_training_op)
+            return pred_op, net, prob_op
 
     def get_loss_op(logits_op, labels_op, alpha=5e-7, beta=5.0):
         with tf.name_scope('loss'):

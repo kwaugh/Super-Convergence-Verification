@@ -87,10 +87,11 @@ def train_loop(runner_train, runner_valid,
 
                 if step % config.save_steps == 0:
                     ensemble.sess = sess
-                    run.Predictor.sun_network = ensemble
+                    run.Predictor.network = ensemble
 
                     print('Step: %d' % step)
                     tmp_best_accuracy = grade.evaluate(run.Predictor)
+                    print('tmp_best_accuracy: %f' % tmp_best_accuracy)
 
                     if tmp_best_accuracy > best_accuracy:
                         best_accuracy = tmp_best_accuracy
@@ -108,7 +109,6 @@ def train_loop(runner_train, runner_valid,
             coord.request_stop(e)
         finally:
             coord.join(threads)
-
 
 def main():
     save_path = os.path.join(config.log_dir, config.model_name)
