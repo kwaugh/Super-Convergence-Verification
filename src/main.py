@@ -39,7 +39,7 @@ parser.add_argument('--model_dir', type=str, default='./model/',
 parser.add_argument('--resnet_size', type=int, default=56,
                     help='The size of the ResNet model to use.')
 
-parser.add_argument('--train_epochs', type=int, default=1600,
+parser.add_argument('--train_epochs', type=int, default=2052,
                     help='The number of epochs to train.')
 
 parser.add_argument('--epochs_per_eval', type=int, default=10,
@@ -60,7 +60,7 @@ _HEIGHT = 32
 _WIDTH = 32
 _DEPTH = 3
 _NUM_CLASSES = 10
-_NUM_DATA_FILES = 4
+_NUM_DATA_FILES = 1
 
 # We use a weight decay of 0.0002, which performs better than the 0.0001 that
 # was originally suggested.
@@ -74,7 +74,7 @@ _INITIAL_LEARNING_RATE = 0.35
 _STEP_SIZE = 10000
 
 _NUM_IMAGES = {
-    'train': 40000,
+    'train': 10000,
     'validation': 10000,
 }
 
@@ -224,7 +224,6 @@ def cifar10_model_fn(features, labels, mode, params):
     batches_per_epoch = _NUM_IMAGES['train'] / params['batch_size']
     global_step = tf.train.get_or_create_global_step()
 
-    # Multiply the learning rate by 0.1 at 100, 150, and 200 epochs.
     boundaries = [int(batches_per_epoch * epoch) for epoch in [40, 100, 200, 800]]
     values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
     learning_rate = tf.train.piecewise_constant(
@@ -281,7 +280,7 @@ def main(unused_argv):
   for _ in range(FLAGS.train_epochs // FLAGS.epochs_per_eval):
     tensors_to_log = {
         'learning_rate': 'learning_rate',
-        'cross_entropy': 'cross_entropy',
+        # 'cross_entropy': 'cross_entropy',
         'train_accuracy': 'train_accuracy'
     }
 
