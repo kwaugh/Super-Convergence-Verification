@@ -10,13 +10,13 @@ import config
 _HEIGHT, _WIDTH, _DEPTH = config.input_shape
 _NUM_CLASSES = config.num_classes
 
-def load_image(path, input_shape):
-    x = Image.open(path)
-    x = x.convert('RGB')
-    h, w, _ = input_shape
-    x = x.resize([h, w])
+# def load_image(path, input_shape):
+#     x = Image.open(path)
+#     x = x.convert('RGB')
+#     h, w, _ = input_shape
+#     x = x.resize([h, w])
 
-    return x
+#     return x
 
 def record_dataset(filenames):
   """Returns an input pipeline Dataset from `filenames`."""
@@ -41,22 +41,45 @@ def get_filenames(is_training, data_dir):
     else:
         return [os.path.join(data_dir, 'test_batch.bin')]
 
-def preprocess_image(image, is_training):
-    """Preprocess a single image of layout [height, width, depth]."""
-    if is_training:
-        # Resize the image to add four extra pixels on each side.
-        image = tf.image.resize_image_with_crop_or_pad(
-                image, _HEIGHT + 8, _WIDTH + 8)
+# def preprocess_image(image, is_training):
+#     """Preprocess a single image of layout [height, width, depth]."""
+#     if is_training:
+#         # Resize the image to add four extra pixels on each side.
+#         image = tf.image.resize_image_with_crop_or_pad(
+#                 image, _HEIGHT + 8, _WIDTH + 8)
 
-        # Randomly crop a [_HEIGHT, _WIDTH] section of the image.
-        image = tf.random_crop(image, [_HEIGHT, _WIDTH, _DEPTH])
+#         # Randomly crop a [_HEIGHT, _WIDTH] section of the image.
+#         image = tf.random_crop(image, [_HEIGHT, _WIDTH, _DEPTH])
 
-        # Randomly flip the image horizontally.
-        image = tf.image.random_flip_left_right(image)
+#         # Randomly flip the image horizontally.
+#         image = tf.image.random_flip_left_right(image)
 
-    # Subtract off the mean and divide by the variance of the pixels.
-    image = tf.image.per_image_standardization(image)
-    return image
+#     # Subtract off the mean and divide by the variance of the pixels.
+#     image = tf.image.per_image_standardization(image)
+#     return image
+
+def preprocess_image(x, input_shape, augment_data, crop_size=4):
+    # if augment_data:
+    #     print('augmenting data')
+    #     print('input_shape:', input_shape)
+    #     print('x:', x)
+    #     bbox = np.array([0, 0] + input_shape[0:2])
+    #     bbox += [1, 1, -1, -1] * np.random.randint(0, crop_size, 4)
+    #     print('got bbox')
+
+    #     x = x.crop(bbox)
+    #     print('cropped')
+    #     h, w, _ = input_shape
+    #     x = x.resize([h, w])
+    #     print('resized')
+
+    # subtract off the mean and divide by the variance of the pixels
+    x = np.float32(x)
+    mean = np.mean(x)
+    var = np.var(x)
+    x = (x - mean) / var
+
+    return x
 
 # def parse_record(raw_record):
 #   """Parse CIFAR-10 image and label from a raw record."""
@@ -102,12 +125,22 @@ def get_samples(images, input_shape):
         # ims[i, :, :, 0] = np.reshape(images[i][0:1024], (32, 32)) # red
         # ims[i, :, :, 1] = np.reshape(images[i][1024:2048], (32, 32)) # green
         # ims[i, :, :, 2] = np.reshape(images[i][2048:], (32, 32)) # blue
-        ims[i] = np.reshape(images[i], tuple(input_shape))
-        # print('equal:', ims[i, :, :, :] == test)
-        # TODO: this doesn't look right when displayed
-        # img = Image.fromarray(ims[i], 'RGB')
+        # image = np.reshape(images[i], tuple(input_shape), 'F')
+        # img = Image.fromarray(image, 'RGB')
         # img.show()
         # input('Press a key')
+
+        image = np.reshape(images[i], tuple(input_shape), 'F')
+        ims[i] = image
+        for d in range(3):
+            for r in range(32):
+                for c in range(32):
+                    ims[i, r, c, d] = image[r, c, d]
+        print('image.shape:', image.shape)
+        print('ims[i].shape:', ims[i].shape)
+        img = Image.fromarray(ims[i], 'RGB')
+        img.show()
+        input('Press a key')
     return ims
 
 class Datagen(object):
@@ -160,8 +193,9 @@ class SparseDatagen(Datagen):
         self._shapes = [input_shape, []]
 
     def __next__(self):
-        image = self.images[self.index]
         label = self.labels[self.index]
+        image = self.images[self.index]
         self.index = (self.index + 1) % len(self.labels)
+        image = preprocess_image(image, self.input_shape, self.augment_data)
 
-        return np.float32(preprocess_image(image, self.augment_data)), np.int32(label)
+        return np.float32(image), np.int32(label)

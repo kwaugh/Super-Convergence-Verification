@@ -4,6 +4,7 @@ import numpy as np
 import utils
 import pickle
 import itertools
+from PIL import Image
 
 def unpickle(file):
     with open(file, 'rb') as fo:
@@ -47,6 +48,22 @@ for i in range(len(data_batch_names)):
 
 valid_data_batch = unpickle(os.path.join(data_dir, 'test_batch'))
 valid_data.append(valid_data_batch[b'data'])
+
+# image = np.zeros((32, 32, 3))
+# # stack the channels manually
+# for d in range(3):
+#     for r in range(32):
+#         for c in range(32):
+#             image[r, c, d] = valid_data[0][0][1024*d + 32*r + c]
+
+# ims[i, :, :, 0] = np.reshape(images[i][0:1024], (32, 32)) # red
+# ims[i, :, :, 1] = np.reshape(images[i][1024:2048], (32, 32)) # green
+# ims[i, :, :, 2] = np.reshape(images[i][2048:], (32, 32)) # blue
+# image = np.reshape(valid_data[0][0], tuple(input_shape), 'F')
+# img = Image.fromarray(image, 'RGB')
+# img.show()
+# input('Press a key')
+
 valid_labels.append(valid_data_batch[b'labels'])
 
 # flatten them

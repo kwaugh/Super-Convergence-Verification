@@ -1,5 +1,6 @@
 from os import path
 import config
+import dataprovider
 
 SRC_PATH = path.dirname(path.abspath(__file__))
 DATA_PATH = path.join(SRC_PATH, '..', 'data')
@@ -26,9 +27,10 @@ def listIms(train=True, valid=True, test=True):
           for j in range(len(config.allTrainImNames[i])):
               r = r + [(config.allTrainImNames[i][j][0], i)]
   if valid:
-      for i in range(len(config.test1ImNames)):
-          for j in range(len(config.test1ImNames[i])):
-              r = r + [(config.test1ImNames[i][j][0], i)]
+      return dataprovider.get_samples(config.valid_data, config.input_shape), config.valid_labels
+      # for i in range(len(config.test1ImNames)):
+      #     for j in range(len(config.test1ImNames[i])):
+      #         r = r + [(config.test1ImNames[i][j][0], i)]
   if test:
       for i in range(len(config.test2ImNames)):
           for j in range(len(config.test2ImNames[i])):
