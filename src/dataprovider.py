@@ -57,7 +57,8 @@ def preprocess_image(x, input_shape, augment_data, crop_size=4):
     return x
 
 def get_samples(images, input_shape):
-    return list(map(lambda x : np.reshape(x, tuple(input_shape), 'F'), images))
+    return list(map(lambda x : np.rot90(
+        np.reshape(x, tuple(input_shape), 'F'), 3), images))
 
 class Datagen(object):
     def __init__(self, is_training, input_shape, num_classes, augment_data):
