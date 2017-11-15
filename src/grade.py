@@ -24,7 +24,7 @@ def evaluate(Predictor):
     for i in range(len(valid_ims)):
         im = valid_ims[i]
         label = valid_labels[i]
-        pred = predictor.predict(im)
+        pred = predictor.predict(im)[0][0]
         truth = label
 
         # overall accuracy
