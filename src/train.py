@@ -91,11 +91,11 @@ def train_loop(runner_train, runner_valid,
 
                     print('Step: %d' % step)
                     tmp_best_accuracy = grade.evaluate(run.Predictor)
-                    print('tmp_best_accuracy: %f' % tmp_best_accuracy)
 
                     if tmp_best_accuracy > best_accuracy:
                         best_accuracy = tmp_best_accuracy
                         saver.save(sess, save_path)
+                    print('best_accuracy: %f' % best_accuracy)
 
                 sess.run(train_op, {is_training_op: True})
 
