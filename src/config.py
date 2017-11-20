@@ -18,7 +18,7 @@ input_shape = [32, 32, 3]
 
 checkpoint_steps = 1000
 save_steps = 1000
-num_steps = 80000
+num_steps = 10000
 
 batch_size = 256
 
@@ -48,22 +48,6 @@ for i in range(len(data_batch_names)):
 
 valid_data_batch = unpickle(os.path.join(data_dir, 'test_batch'))
 valid_data.append(valid_data_batch[b'data'])
-
-# image = np.zeros((32, 32, 3))
-# # stack the channels manually
-# for d in range(3):
-#     for r in range(32):
-#         for c in range(32):
-#             image[r, c, d] = valid_data[0][0][1024*d + 32*r + c]
-
-# ims[i, :, :, 0] = np.reshape(images[i][0:1024], (32, 32)) # red
-# ims[i, :, :, 1] = np.reshape(images[i][1024:2048], (32, 32)) # green
-# ims[i, :, :, 2] = np.reshape(images[i][2048:], (32, 32)) # blue
-# image = np.reshape(valid_data[0][0], tuple(input_shape), 'F')
-# img = Image.fromarray(image, 'RGB')
-# img.show()
-# input('Press a key')
-
 valid_labels.append(valid_data_batch[b'labels'])
 
 # flatten them
@@ -71,3 +55,9 @@ train_data = list(itertools.chain.from_iterable(train_data))
 train_labels = list(itertools.chain.from_iterable(train_labels))
 valid_data = list(itertools.chain.from_iterable(valid_data))
 valid_labels = list(itertools.chain.from_iterable(valid_labels))
+
+# CLR variables
+cycle_size = 10000
+step_size = cycle_size // 2
+min_lr = 0.1
+max_lr = 3.0

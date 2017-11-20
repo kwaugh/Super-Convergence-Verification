@@ -21,7 +21,8 @@ def get_train_op(loss_op, train_vars):
     with tf.variable_scope('training'):
         step_op = tf.Variable(0, name='step', trainable=False)
 
-        learn_rate_op = tf.train.piecewise_constant(step_op, bounds, values)
+        # learn_rate_op = tf.train.piecewise_constant(step_op, bounds, values)
+        learn_rate_op = tf.placeholder(tf.float32, shape=[])
         optimizer_op = tf.train.MomentumOptimizer(learn_rate_op, momentum=0.9)
 
         with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
@@ -51,7 +52,7 @@ def load_checkpoint(sess, checkpoint, scope):
     slim.assign_from_checkpoint_fn(checkpoint, slim.get_model_variables(scope))(sess)
 
 def train_loop(runner_train, runner_valid,
-               step_op, train_op, summary_op, is_training_op,
+               step_op, train_op, summary_op, is_training_op, learn_rate_op,
                saved_vars, save_path, log_dir, ensemble,
                pre_loop_callback=lambda x: None):
     saved_vars_dict = {key.name: key for key in saved_vars}
@@ -78,18 +79,29 @@ def train_loop(runner_train, runner_valid,
 
                 step = sess.run(step_op)
 
-                if step % config.checkpoint_steps == 0:
-                    summary_train = sess.run(summary_op, {is_training_op: True})
-                    summary_valid = sess.run(summary_op, {is_training_op: False})
+                # if step % config.checkpoint_steps == 0:
+                #     summary_train = sess.run(summary_op,
+                #             {is_training_op: True})
+                #     summary_valid = sess.run(summary_op,
+                #             {is_training_op: False})
 
-                    summary_writer.add_summary(summary_train, step)
-                    summary_writer.add_summary(summary_valid, step)
+                #     summary_writer.add_summary(summary_train, step)
+                #     summary_writer.add_summary(summary_valid, step)
+
+                percent_step = (step % config.step_size) / config.step_size
+                if step % config.cycle_size < config.step_size:
+                    # lr increasing
+                    cur_lr = (1 - percent_step) * config.min_lr + percent_step * config.max_lr
+                else:
+                    # lr decreasing
+                    cur_lr = (1 - percent_step) * config.max_lr + percent_step * config.min_lr
 
                 if step % config.save_steps == 0:
                     ensemble.sess = sess
                     run.Predictor.network = ensemble
 
                     print('Step: %d' % step)
+                    print('cur_lr:', cur_lr)
                     tmp_best_accuracy = grade.evaluate(run.Predictor)
 
                     if tmp_best_accuracy > best_accuracy:
@@ -97,7 +109,8 @@ def train_loop(runner_train, runner_valid,
                         saver.save(sess, save_path)
                     print('best_accuracy: %f' % best_accuracy)
 
-                sess.run(train_op, {is_training_op: True})
+                sess.run(train_op,
+                        {is_training_op: True, learn_rate_op: cur_lr})
 
             coord.request_stop()
         except Exception as e:
@@ -156,7 +169,7 @@ def main():
             grad_var_op, is_training_op, network)
 
     train_loop(runner_train, runner_valid,
-               step_op, train_op, summary_op, is_training_op,
+               step_op, train_op, summary_op, is_training_op, learn_rate_op,
                saved_vars, save_path, config.log_dir,
                network, network.restore)
 

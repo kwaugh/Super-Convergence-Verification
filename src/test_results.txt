@@ -14,3 +14,5 @@ ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   
 
 I'm assuming that they used 1000 batch size for their tests because that's how the got the best results.
 Cifar10 has 50k test images which means 50 iterations per epoch. 80k iterations -> 1600 epochs
+
+Assuming step size of 5k for CLR (it isn't specified for table 1)
