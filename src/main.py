@@ -70,6 +70,10 @@ _USE_CLR = True
 if _USE_CLR:
     print('USING CLR')
     _WEIGHT_DECAY = 1e-4
+    _CYCLE_SIZE = 10000
+    _STEP_SIZE = _CYCLE_SIZE // 2
+    _MIN_LEARNING_RATE = 0.1
+    _MAX_LEARNING_RATE = 2.5
     _BOUNDARIES = [i for i in range(_CYCLE_SIZE)]
     _VALUES = [0] * _CYCLE_SIZE
     for i in range(_STEP_SIZE):
@@ -80,16 +84,10 @@ if _USE_CLR:
         _VALUES[i] = (1 - pct)*_MAX_LEARNING_RATE + pct*_MIN_LEARNING_RATE
 else:
     print('USING PC-LR')
+    _INITIAL_LEARNING_RATE = 0.35
     _WEIGHT_DECAY = 2e-4
 
 _MOMENTUM = 0.9
-# used for CLR
-_MIN_LEARNING_RATE = 0.1
-_MAX_LEARNING_RATE = 3.5
-# used for PC-LR
-_INITIAL_LEARNING_RATE = 0.35
-_CYCLE_SIZE = 10000
-_STEP_SIZE = _CYCLE_SIZE // 2
 
 _NUM_IMAGES = {
     'train': 50000,
@@ -237,7 +235,6 @@ def cifar10_model_fn(features, labels, mode, params):
   if mode == tf.estimator.ModeKeys.TRAIN:
     # Scale the learning rate linearly with the batch size. When the batch size
     # is 128, the learning rate should be 0.1.
-    initial_learning_rate = _INITIAL_LEARNING_RATE
     batches_per_epoch = math.ceil(_NUM_IMAGES['train'] / params['batch_size'])
     global_step = tf.train.get_or_create_global_step()
 
@@ -245,6 +242,7 @@ def cifar10_model_fn(features, labels, mode, params):
         learning_rate = tf.train.piecewise_constant(
             tf.cast(global_step, tf.int32), _BOUNDARIES, _VALUES)
     else:
+        initial_learning_rate = _INITIAL_LEARNING_RATE
         boundaries = [int(batches_per_epoch * epoch) for epoch in [40, 100, 200, 800]]
         values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
         learning_rate = tf.train.piecewise_constant(
