@@ -25,7 +25,7 @@ import sys
 import tensorflow as tf
 
 import resnet_model
-import clr_callback
+import math
 
 parser = argparse.ArgumentParser()
 
@@ -39,7 +39,7 @@ parser.add_argument('--model_dir', type=str, default='./model/',
 parser.add_argument('--resnet_size', type=int, default=56,
                     help='The size of the ResNet model to use.')
 
-parser.add_argument('--train_epochs', type=int, default=2052,
+parser.add_argument('--train_epochs', type=int, default=60,
                     help='The number of epochs to train.')
 
 parser.add_argument('--epochs_per_eval', type=int, default=10,
@@ -60,24 +60,41 @@ _HEIGHT = 32
 _WIDTH = 32
 _DEPTH = 3
 _NUM_CLASSES = 10
-_NUM_DATA_FILES = 1
+_NUM_DATA_FILES = 5
+
+# Use cyclical learning rate
+_USE_CLR = True
 
 # We use a weight decay of 0.0002, which performs better than the 0.0001 that
 # was originally suggested.
-_WEIGHT_DECAY = 2e-4
+if _USE_CLR:
+    print('USING CLR')
+    _WEIGHT_DECAY = 1e-4
+    _BOUNDARIES = [i for i in range(_CYCLE_SIZE)]
+    _VALUES = [0] * _CYCLE_SIZE
+    for i in range(_STEP_SIZE):
+        pct = i / _STEP_SIZE
+        _VALUES[i] = (1 - pct)*_MIN_LEARNING_RATE + pct*_MAX_LEARNING_RATE
+    for i in range(_STEP_SIZE, _CYCLE_SIZE):
+        pct = (i - _STEP_SIZE) / _STEP_SIZE
+        _VALUES[i] = (1 - pct)*_MAX_LEARNING_RATE + pct*_MIN_LEARNING_RATE
+else:
+    print('USING PC-LR')
+    _WEIGHT_DECAY = 2e-4
+
 _MOMENTUM = 0.9
 # used for CLR
 _MIN_LEARNING_RATE = 0.1
-_MAX_LEARNING_RATE = 3.0
+_MAX_LEARNING_RATE = 3.5
 # used for PC-LR
 _INITIAL_LEARNING_RATE = 0.35
-_STEP_SIZE = 10000
+_CYCLE_SIZE = 10000
+_STEP_SIZE = _CYCLE_SIZE // 2
 
 _NUM_IMAGES = {
-    'train': 10000,
+    'train': 50000,
     'validation': 10000,
 }
-
 
 def record_dataset(filenames):
   """Returns an input pipeline Dataset from `filenames`."""
@@ -221,16 +238,17 @@ def cifar10_model_fn(features, labels, mode, params):
     # Scale the learning rate linearly with the batch size. When the batch size
     # is 128, the learning rate should be 0.1.
     initial_learning_rate = _INITIAL_LEARNING_RATE
-    batches_per_epoch = _NUM_IMAGES['train'] / params['batch_size']
+    batches_per_epoch = math.ceil(_NUM_IMAGES['train'] / params['batch_size'])
     global_step = tf.train.get_or_create_global_step()
 
-    boundaries = [int(batches_per_epoch * epoch) for epoch in [40, 100, 200, 800]]
-    values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
-    learning_rate = tf.train.piecewise_constant(
-        tf.cast(global_step, tf.int32), boundaries, values)
-    # learning_rate = clr_callback.CyclicLR(base_lr=_MIN_LEARNING_RATE,
-    #         max_lr=_MAX_LEARNING_RATE, step_size=_STEP_SIZE)
-    # learning_rate = learning_rate.clr()
+    if _USE_CLR:
+        learning_rate = tf.train.piecewise_constant(
+            tf.cast(global_step, tf.int32), _BOUNDARIES, _VALUES)
+    else:
+        boundaries = [int(batches_per_epoch * epoch) for epoch in [40, 100, 200, 800]]
+        values = [initial_learning_rate * decay for decay in [1, 0.1, 0.01, 0.001, 0.0001]]
+        learning_rate = tf.train.piecewise_constant(
+            tf.cast(global_step, tf.int32), boundaries, values)
 
     # Create a tensor named learning_rate for logging purposes
     tf.identity(learning_rate, name='learning_rate')
