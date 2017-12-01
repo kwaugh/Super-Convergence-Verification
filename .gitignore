@@ -3,3 +3,7 @@ __pycache__
 src/model/
 src/log/
 src/output.txt
+*.aux
+*.bbl
+*.blg
+*.log
