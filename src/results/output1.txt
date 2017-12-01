@@ -1,0 +1,9 @@
+USING CLR
+eval_results: {'accuracy': 0.71210003, 'loss': 1.1509193, 'global_step': 1954}
+eval_results: {'accuracy': 0.67879999, 'loss': 1.514514, 'global_step': 3908}
+eval_results: {'accuracy': 0.53200001, 'loss': 2.2375102, 'global_step': 5862}
+eval_results: {'accuracy': 0.76899999, 'loss': 1.0614998, 'global_step': 7816}
+eval_results: {'accuracy': 0.88569999, 'loss': 0.59150136, 'global_step': 9770}
+eval_results: {'accuracy': 0.87, 'loss': 0.67378372, 'global_step': 11724}
+
+ResNet-56   | CLR=0.1-2.0   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8857   | 50k     |

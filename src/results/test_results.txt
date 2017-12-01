@@ -1,0 +1,29 @@
+This is a file to keep track of our results as they are generated
+
+Model       | Learning Rate | Dataset   | Momentum | Optimizer | BN MAF | Iters | B.S. | Accuracy | Samples |
+------------------------------------------------------------------------------------------------------------
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9369   | 50k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9189   | 40k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.9001   | 30k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.8670   | 20k     |
+ResNet-56   | PC-LR=0.35    | cifar-10  | 0.9      | SGD       | 0.999  | 80k   | 256  | 0.8167   | 10k     |
+-------------------------------------------------------------------------------------------------------------
+ResNet-56   | CLR=0.1-3     | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8851   | 50k     |
+ResNet-56   | CLR=0.1-3     | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8412   | 40k     | validation accuracy did not go up with more iterations
+ResNet-56   | CLR=0.1-3     | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8377   | 30k     |
+ResNet-56   | CLR=0.1-3     | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8357   | 20k     |
+ResNet-56   | CLR=0.1-3     | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8046   | 10k     |
+-------------------------------------------------------------------------------------------------------------
+ResNet-56   | CLR=0.1-3.5   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.7299   | 50k     |
+ResNet-56   | CLR=0.1-3.0   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | See above| 50k     |
+ResNet-56   | CLR=0.1-2.5   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8705   | 50k     |
+ResNet-56   | CLR=0.1-2.0   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8857   | 50k     |
+ResNet-56   | CLR=0.1-1.5   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8688   | 50k     |
+ResNet-56   | CLR=0.1-1.0   | cifar-10  | 0.9      | SGD       | 0.95   | 10k   | 256  | 0.8933   | 50k     |
+
+
+* B.S. = Batch Size
+
+
+I'm assuming that they used 1000 batch size for their tests because that's how the got the best results.
+Cifar10 has 50k test images which means 50 iterations per epoch. 80k iterations -> 1600 epochs

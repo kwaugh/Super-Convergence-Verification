@@ -1,0 +1,23 @@
+USING CLR
+eval_results: {'accuracy': 0.33840001, 'loss': 2.7639349, 'global_step': 500}
+eval_results: {'accuracy': 0.63810003, 'loss': 1.3951209, 'global_step': 1000}
+eval_results: {'accuracy': 0.54879999, 'loss': 1.9821112, 'global_step': 1500}
+eval_results: {'accuracy': 0.6415, 'loss': 1.4955887, 'global_step': 2000}
+eval_results: {'accuracy': 0.68730003, 'loss': 1.4655205, 'global_step': 2500}
+eval_results: {'accuracy': 0.60619998, 'loss': 1.7312682, 'global_step': 3000}
+eval_results: {'accuracy': 0.58569998, 'loss': 1.9471865, 'global_step': 3500}
+eval_results: {'accuracy': 0.6771, 'loss': 1.4193605, 'global_step': 4000}
+eval_results: {'accuracy': 0.55540001, 'loss': 1.9499609, 'global_step': 4500}
+eval_results: {'accuracy': 0.60409999, 'loss': 1.8018478, 'global_step': 5000}
+eval_results: {'accuracy': 0.42899999, 'loss': 3.1322591, 'global_step': 5500}
+eval_results: {'accuracy': 0.56269997, 'loss': 1.7276597, 'global_step': 6000}
+eval_results: {'accuracy': 0.60579997, 'loss': 1.7026994, 'global_step': 6500}
+eval_results: {'accuracy': 0.66549999, 'loss': 1.4425778, 'global_step': 7000}
+eval_results: {'accuracy': 0.59969997, 'loss': 2.0179312, 'global_step': 7500}
+eval_results: {'accuracy': 0.72469997, 'loss': 1.2197695, 'global_step': 8000}
+eval_results: {'accuracy': 0.73769999, 'loss': 1.1715389, 'global_step': 8500}
+eval_results: {'accuracy': 0.79439998, 'loss': 0.92172348, 'global_step': 9000}
+eval_results: {'accuracy': 0.82139999, 'loss': 0.79570121, 'global_step': 9500}
+eval_results: {'accuracy': 0.88260001, 'loss': 0.59288347, 'global_step': 10000}
+
+output for figure 6b CLR portion - ResNet110

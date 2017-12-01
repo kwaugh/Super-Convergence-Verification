@@ -1,0 +1,9 @@
+USING CLR
+eval_results: {'accuracy': 0.47589999, 'loss': 1.7666626, 'global_step': 500}
+eval_results: {'accuracy': 0.5668, 'loss': 1.7412671, 'global_step': 1000}
+eval_results: {'accuracy': 0.62900001, 'loss': 1.5815822, 'global_step': 1500}
+eval_results: {'accuracy': 0.82529998, 'loss': 0.78826857, 'global_step': 2000}
+eval_results: {'accuracy': 0.84359998, 'loss': 0.71541518, 'global_step': 2500}
+eval_results: {'accuracy': 0.84530002, 'loss': 0.69748718, 'global_step': 3000}
+
+output for figure 1b CLR portion - stepsize 1k

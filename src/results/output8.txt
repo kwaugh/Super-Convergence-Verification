@@ -1,0 +1,45 @@
+USING CLR
+eval_results: {'global_step': 500, 'accuracy': 0.49950001, 'loss': 1.9933947}
+eval_results: {'global_step': 1000, 'accuracy': 0.59780002, 'loss': 1.4627991}
+eval_results: {'global_step': 1500, 'accuracy': 0.65439999, 'loss': 1.3382478}
+eval_results: {'global_step': 2000, 'accuracy': 0.62040001, 'loss': 1.6578777}
+eval_results: {'global_step': 2500, 'accuracy': 0.6372, 'loss': 1.6619672}
+eval_results: {'global_step': 3000, 'accuracy': 0.62449998, 'loss': 1.6639616}
+eval_results: {'global_step': 3500, 'accuracy': 0.71899998, 'loss': 1.3340123}
+eval_results: {'global_step': 4000, 'accuracy': 0.69730002, 'loss': 1.3398697}
+eval_results: {'global_step': 4500, 'accuracy': 0.67470002, 'loss': 1.4563413}
+eval_results: {'global_step': 5000, 'accuracy': 0.64910001, 'loss': 1.5940688}
+eval_results: {'global_step': 5500, 'accuracy': 0.54079998, 'loss': 2.1231527}
+eval_results: {'global_step': 6000, 'accuracy': 0.68589997, 'loss': 1.4603349}
+eval_results: {'global_step': 6500, 'accuracy': 0.73519999, 'loss': 1.2510258}
+eval_results: {'global_step': 7000, 'accuracy': 0.36970001, 'loss': 3.8382652}
+eval_results: {'global_step': 7500, 'accuracy': 0.64399999, 'loss': 1.6281456}
+eval_results: {'global_step': 8000, 'accuracy': 0.58380002, 'loss': 1.7151494}
+eval_results: {'global_step': 8500, 'accuracy': 0.62370002, 'loss': 1.7971104}
+eval_results: {'global_step': 9000, 'accuracy': 0.65679997, 'loss': 1.5668073}
+eval_results: {'global_step': 9500, 'accuracy': 0.59369999, 'loss': 1.758266}
+eval_results: {'global_step': 10000, 'accuracy': 0.44420001, 'loss': 2.3703568}
+eval_results: {'global_step': 10500, 'accuracy': 0.63150001, 'loss': 1.5701844}
+eval_results: {'global_step': 11000, 'accuracy': 0.44800001, 'loss': 2.5310907}
+eval_results: {'global_step': 11500, 'accuracy': 0.43489999, 'loss': 3.7580869}
+eval_results: {'global_step': 12000, 'accuracy': 0.61760002, 'loss': 1.8246197}
+eval_results: {'global_step': 12500, 'accuracy': 0.56809998, 'loss': 1.9859941}
+eval_results: {'global_step': 13000, 'accuracy': 0.5086, 'loss': 2.8898606}
+eval_results: {'global_step': 13500, 'accuracy': 0.6961, 'loss': 1.3368651}
+eval_results: {'global_step': 14000, 'accuracy': 0.65450001, 'loss': 1.674974}
+eval_results: {'global_step': 14500, 'accuracy': 0.64099997, 'loss': 1.5512116}
+eval_results: {'global_step': 15000, 'accuracy': 0.67180002, 'loss': 1.4214624}
+eval_results: {'global_step': 15500, 'accuracy': 0.69349998, 'loss': 1.3236067}
+eval_results: {'global_step': 16000, 'accuracy': 0.7076, 'loss': 1.3663036}
+eval_results: {'global_step': 16500, 'accuracy': 0.7658, 'loss': 1.0279593}
+eval_results: {'global_step': 17000, 'accuracy': 0.6796, 'loss': 1.3201637}
+eval_results: {'global_step': 17500, 'accuracy': 0.73629999, 'loss': 1.1892245}
+eval_results: {'global_step': 18000, 'accuracy': 0.7331, 'loss': 1.2027527}
+eval_results: {'global_step': 18500, 'accuracy': 0.75230002, 'loss': 1.0965565}
+eval_results: {'global_step': 19000, 'accuracy': 0.83109999, 'loss': 0.75807542}
+eval_results: {'global_step': 19500, 'accuracy': 0.82889998, 'loss': 0.77550101}
+eval_results: {'global_step': 20000, 'accuracy': 0.88959998, 'loss': 0.54975146}
+eval_results: {'global_step': 20500, 'accuracy': 0.8854, 'loss': 0.56946677}
+eval_results: {'global_step': 21000, 'accuracy': 0.87180001, 'loss': 0.61029047}
+
+output for figure 1b CLR portion - stepsize 10k

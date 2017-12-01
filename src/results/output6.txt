@@ -1,0 +1,17 @@
+USING CLR
+eval_results: {'global_step': 500, 'accuracy': 0.52359998, 'loss': 1.5611881}
+eval_results: {'global_step': 1000, 'accuracy': 0.61430001, 'loss': 1.4930159}
+eval_results: {'global_step': 1500, 'accuracy': 0.61260003, 'loss': 1.7145079}
+eval_results: {'global_step': 2000, 'accuracy': 0.65979999, 'loss': 1.3903705}
+eval_results: {'global_step': 2500, 'accuracy': 0.61790001, 'loss': 1.6850821}
+eval_results: {'global_step': 3000, 'accuracy': 0.59399998, 'loss': 1.90254}
+eval_results: {'global_step': 3500, 'accuracy': 0.72979999, 'loss': 1.2815356}
+eval_results: {'global_step': 4000, 'accuracy': 0.55769998, 'loss': 1.9746749}
+eval_results: {'global_step': 4500, 'accuracy': 0.59799999, 'loss': 1.7418207}
+eval_results: {'global_step': 5000, 'accuracy': 0.64060003, 'loss': 1.5683481}
+eval_results: {'global_step': 5500, 'accuracy': 0.8276, 'loss': 0.79311907}
+eval_results: {'global_step': 6000, 'accuracy': 0.87330002, 'loss': 0.63236064}
+eval_results: {'global_step': 6500, 'accuracy': 0.87519997, 'loss': 0.61880696}
+eval_results: {'global_step': 7000, 'accuracy': 0.86479998, 'loss': 0.64403725}
+
+output for figure 1b CLR portion - stepsize 3k

@@ -1,0 +1,25 @@
+USING CLR
+eval_results: {'accuracy': 0.4772, 'loss': 2.3094277, 'global_step': 500}
+eval_results: {'accuracy': 0.57529998, 'loss': 1.7034678, 'global_step': 1000}
+eval_results: {'accuracy': 0.57550001, 'loss': 1.8647231, 'global_step': 1500}
+eval_results: {'accuracy': 0.60210001, 'loss': 1.7818788, 'global_step': 2000}
+eval_results: {'accuracy': 0.38909999, 'loss': 3.6341937, 'global_step': 2500}
+eval_results: {'accuracy': 0.6462, 'loss': 1.5890567, 'global_step': 3000}
+eval_results: {'accuracy': 0.61110002, 'loss': 1.9365796, 'global_step': 3500}
+eval_results: {'accuracy': 0.52249998, 'loss': 2.3908205, 'global_step': 4000}
+eval_results: {'accuracy': 0.4901, 'loss': 2.6786838, 'global_step': 4500}
+eval_results: {'accuracy': 0.54470003, 'loss': 2.0659342, 'global_step': 5000}
+eval_results: {'accuracy': 0.5995, 'loss': 1.8342204, 'global_step': 5500}
+eval_results: {'accuracy': 0.65490001, 'loss': 1.5854627, 'global_step': 6000}
+eval_results: {'accuracy': 0.62400001, 'loss': 1.7712598, 'global_step': 6500}
+eval_results: {'accuracy': 0.6742, 'loss': 1.4526502, 'global_step': 7000}
+eval_results: {'accuracy': 0.71490002, 'loss': 1.3706214, 'global_step': 7500}
+eval_results: {'accuracy': 0.65450001, 'loss': 1.4878845, 'global_step': 8000}
+eval_results: {'accuracy': 0.75989997, 'loss': 1.1342363, 'global_step': 8500}
+eval_results: {'accuracy': 0.7888, 'loss': 0.92010736, 'global_step': 9000}
+eval_results: {'accuracy': 0.80229998, 'loss': 0.89838129, 'global_step': 9500}
+eval_results: {'accuracy': 0.88510001, 'loss': 0.5825454, 'global_step': 10000}
+eval_results: {'accuracy': 0.88370001, 'loss': 0.5721451, 'global_step': 10500}
+eval_results: {'accuracy': 0.87559998, 'loss': 0.60915184, 'global_step': 11000}
+
+output for figure 1a CLR portion
