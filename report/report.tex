@@ -64,11 +64,37 @@ Paul
 
 \section{Method}
 \label{sec:method}
-Due to time and hardware constraints (lack of multiple GPUs), we were unable to replicate all of the experiments that were listed in the paper. Therefore, we had to choose which experiments from which we could glean the most. 
+Due to time and hardware constraints (lack of multiple GPUs), we were unable to
+replicate all of the experiments that were listed in the paper. Therefore, we
+had to choose which experiments from which we could glean the most. It was our
+goal to show the existence or not of the following claims made in the paper.
+SC:
+\begin{itemize}
+    \item allows the network to achieve higher test accuracy than traditional
+        piece-wise constant learning rates (PCLR)
+    \item requires an order of magnitude fewer iterations to converge than PCLR
+    \item is more noticeable with fewer training examples
+    \item works with various ResNet sizes
+    \item works best with a certain step size
+\end{itemize}
+
+When available, we used the hyperparameters that the authors listed in their
+paper. When these were omitted, we attempted to use standard values that are
+used on Cifar-10 and ResNets.
 
 \subsection{Implementation Details}
-Discuss things like batch size that we were limited by because we only had
-one GPU to run things on at a time (8GB of memory)
+In the ICLR submitted paper, the authors mentioned that they would release
+their code upon acceptance to the conference. However, upon Googling the paper
+name, we found an arXiv version of the paper that links to the authors' source
+code on GitHub. We chose to not look at this code and reimplement their
+solution so that we could test the reproducibility under the information
+(especially hyperparameters) that were listed in the ICLR paper.
+
+As a starting point, we used the open source ResNet training on Cifar-10 code
+available in the TensorFlow \cite{TensorFlow} repository. We modified the code
+accordingly for each of the experiments.
+
+A major limitation in our testing was our restriction to a single GPU for all of the experiments. The authors stated that they used 8 Nvidia Titan Black GPUs, which allowed them to test with batch sizes as large as 1536. We were restricted to a batch size of 256. The authors found that increasing the batch size significantly improved the performance of their CLR tests, so the discrepancy between our results and the authors could be due to this.
 
 %------------------------------------------------------------------------------
 
