@@ -65,7 +65,9 @@ methods.  Super-convergence simply requires using a cyclical learning rate
 (CLR) versus the standard piecewise constant learning rate (PCLR). When using
 the CLR method, the learning rate is slowly increased for a minimum learning
 rate to a maximum learning rate, then slowly decreased back to the minimum
-learning rate again, after which training stops.
+learning rate again, after which training stops. The number of iterations taken
+to go from the minimum learning rate to the maximum and vice versa is referred
+to as the step-size and is a hyperparameter.
 
 The authors run a variety of experiments to see under what circumstances
 super-convergence can be achieved with the CLR method. Using Cifar-10 and
@@ -88,7 +90,6 @@ most significant claims made by the authors. Specifically, we aim to:
         limited training examples
     \item Verify the reported accuracy trends of using varying step sizes,
         learning rate ranges, and iterations for the CLR method
-    \item 
 \end{itemize}
 %------------------------------------------------------------------------------
 
@@ -98,7 +99,7 @@ Due to time and hardware constraints (lack of multiple GPUs), we were unable to
 replicate all of the experiments that were listed in the paper. Therefore, we
 had to choose which experiments from which we could glean the most. It was our
 goal to show the existence or not of the following claims made in the paper.
-SC:
+Super-convergence:
 \begin{itemize}
     \item allows the network to achieve higher test accuracy than traditional
         piece-wise constant learning rates (PCLR)
@@ -135,10 +136,29 @@ Keivaun
 
 \section{Conclusion}
 \label{sec:conclusion}
-Paul
+We confirm the existence of the ``super-convergence'' phenomenon under the
+circumstances given by the authors: ResNets can be trained an order of
+magnitude more quickly on Cifar 10 and Cifar 100 using large, cyclical learning
+rates. Unlike the authors, however, we find that the accuracy achieved using
+this method is below that of using a piecewise-constant learning rate. In
+addition, we find that the CLR method is not superior to the PCLR method when
+limited training data is used, contrary to the authors' experiments. When
+adjusting step-size, learning rate range, and number of iterations, we observe
+trends similar to those of the authors.
+
+The discrepancy in peak accuracy between our super-convergence experiments and
+those of the authors may be attributable to the very large batch size of 1000
+used by the authors. This large batch size allows the authors to train their
+network more quickly than we could, as we do not possess the hardware to use
+such a large batch size. However, the general trends should and do still hold.
+
+We believe that circumstances under which super-convergence occurs are too
+limited to be considered useful and surmise that further investigation into the
+benefits of large and cyclical learning rates rather than trying to reproduce
+may be an isolated phenomenon under different circumstances.
 
 \subsection{Cost of Reproduction}
-What cost in terms of resources (computation, time, people, developemnt effort, communication with the authors).
+What cost in terms of resources (computation, time, people, development effort, communication with the authors).
 
 {\small
 \bibliographystyle{ieee}
