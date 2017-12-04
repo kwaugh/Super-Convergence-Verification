@@ -1,6 +1,7 @@
 \documentclass[10pt,twocolumn,letterpaper]{article}
 
 \usepackage{cvpr}
+\usepackage{float}
 \usepackage{times}
 \usepackage{epsfig}
 \usepackage{graphicx}
@@ -119,19 +120,159 @@ their code upon acceptance to the conference. However, upon Googling the paper
 name, we found an arXiv version of the paper that links to the authors' source
 code on GitHub. We chose to not look at this code and reimplement their
 solution so that we could test the reproducibility under the information
-(especially hyperparameters) that were listed in the ICLR paper.
+that was listed in the ICLR paper.
 
 As a starting point, we used the open source ResNet training on Cifar-10 code
 available in the TensorFlow \cite{TensorFlow} repository. We modified the code
 accordingly for each of the experiments.
 
-A major limitation in our testing was our restriction to a single GPU for all of the experiments. The authors stated that they used 8 Nvidia Titan Black GPUs, which allowed them to test with batch sizes as large as 1536. We were restricted to a batch size of 256. The authors found that increasing the batch size significantly improved the performance of their CLR tests, so the discrepancy between our results and the authors could be due to this.
+A major limitation in our testing was our restriction to a single GPU for all
+of the experiments. The authors stated that they used 8 Nvidia Titan Black
+GPUs, which allowed them to test with batch sizes as large as 1536. We were
+restricted to a batch size of 256. The authors found that increasing the batch
+size significantly improved the performance of their CLR tests, so the
+discrepancy between our results and the authors could be due to this. It was
+unclear from the paper whether these large batch size were used with their PCLR
+test as well.
 
 %------------------------------------------------------------------------------
 
 \section{Experiments}
-Keivaun
-\subsection{Methodology}
+All experiments were run on a single machine with a quad core Intel Core i5
+processor, 16GB of RAM, and an Nvidia GTX 1070 GPU. The effect of batch sizes
+on our results will be discussed in section \ref{sec:conclusion}.
+
+\subsection{Existence of Super-Convergence}
+\label{sec:existence_of_super_convergence}
+Figure \ref{fig:clr_vs_pclr} shows the results we obtained when we ran the
+tests displayed in figure 1a of the original paper. Here we can see from the
+blue line that one of the CLR runs did peak and achieve better results than
+PCLR with fewer iterations. However, the PCLR run achieved a higher final
+accuracy on the test set, unlike what the authors reported. Additionally, the
+CLR test was repeated with the same hyperparameters, but given the same number
+of iterations as the PCLR test(green line). It achieved significantly worse
+accuracy than the other two tests. Interestingly, the green run also had worse
+accuracy than the blue run in the first ten thousand iterations, which suggests
+that super-convergence is highly sensitive to the initial weight initialization
+and the noise introduced by stochastic gradient descent.
+
+\begin{figure*}[ht!]
+    \begin{tabular}{cc}
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/figure_1a.png} &
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/clr_vs_pclr.png} \\
+        Author's Results & Our Results \\
+    \end{tabular}
+    \caption{Cyclical learning rate (CLR) versus piecewise linear learning rate
+    (LR/PCLR).}
+    \label{fig:clr_vs_pclr}
+\end{figure*}
+
+\subsection{Effect of Step Size}
+The authors ran experiments to determine the best step-size for CLR to achieve
+the best super-convergence results.  Somewhat puzzling is the fact that the
+authors display a step-size of three thousand appears to be better than five
+thousand. However, they chose to use five thousand as their step-size in a
+majority of their tests. Due to their description of CLR having only one
+increasing LR phase and one decreasing LR phase, using a step-size of three
+thousand would result in only six thousand total iterations needed to achieve
+final peak accuracy. This would have decreased their required test time for
+many of their experiments and would make the effect of super-convergence appear
+more drastic as it would need $40\%$ fewer iterations than reported.
+
+Our results for this experiment are listed in figure \ref{fig:step_size}. We
+report similar trends in the step sizes, with accuracy increasing as step size
+increases. However, as reported in section
+\ref{sec:existence_of_super_convergence}, all of our accuracies are lower than
+what the authors report. Even the trial with ten thousand step size has worse
+performance than the traditional PCLR method.
+
+\begin{figure*}[ht!]
+    \begin{tabular}{cc}
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/figure_1b.png} &
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/step_sizes.png} \\
+        Author's Results & Our Results \\
+    \end{tabular}
+    \caption{The effect of CLR step size on super-convergence.}
+    \label{fig:step_size}
+\end{figure*}
+
+\subsection{Reduced Training Set}
+One of the most appealing effects of super-convergence via the usage of CLR is
+the increased performance with smaller training sets. This experiment,
+displayed in figure \ref{fig:reduced_training_set} had the most contradicting
+results with what the authors reported. While we got similar results with the
+CLR tests, with both the ten and twenty thousand samples peaking towards the
+end of their run, both of our PCLR tests peaked much faster than in the
+authors' results. The PCLR test with ten thousand samples peaked before the CLR
+runs, and the PCLR test with twenty thousand samples achieved higher test
+accuracy with just a few thousand more iterations than the CLR runs.
+
+\begin{figure*}[ht!]
+    \begin{tabular}{cc}
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/figure_6a.png} &
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/reduced_training_set.png} \\
+        Author's Results & Our Results \\
+    \end{tabular}
+    \caption{Reduced training set effect of PCLR and CLR.}
+    \label{fig:reduced_training_set}
+\end{figure*}
+
+\subsection{ResNet Depth}
+Here we attempt to reproduce the ResNet depth experiments, with results
+displayed in figure \ref{fig:resnet_sizes}. Here, the authors' results are
+consistent with intuition and their previous results. CLR peaks early and about
+as high or higher than PCLR, and deeper architectures exhibit smaller test
+error. Our results too display that deeper architectures work better on both
+CLR and PCLR. However, consistent with our other results, we show that CLR
+achieves worse final test error than PCLR.
+
+\begin{figure*}[ht!]
+    \begin{tabular}{cc}
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/figure_6b.png} &
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/resnet_sizes.png} \\
+        Author's Results & Our Results \\
+    \end{tabular}
+    \caption{Effect of ResNet depth on CLR and PCLR.}
+    \label{fig:resnet_sizes}
+\end{figure*}
+
+\subsection{CLR Min and Max Values}
+Figure \ref{fig:table} displays results from previous tests as well as tests
+for the min/max learning rate values for CLR. While we find that the range
+$0.1-3.0$ works best for the learning rate, there does not appear to be a
+consistent decreasing trend as the range is decreased.
+
+CLR may turn out to be a dead-end research path in the near future. In
+\cite{SGD_Minima} Jastrebski et al. show another way to help the network
+generalize. By increasing the ratio of the learning rate to the batch size,
+more noise is injected into the system during training which helps with
+regularization. This appears to be happening in the super-convergence authors'
+results. However, we expected to see a peak in CLR test results with smaller
+learning rates in our test results since we are using smaller batch sizes. This
+would keep the learning rate to batch size ratio more consistent with the
+authors'. We did not see this behavior in our testing, possible indicating that
+this ratio exhibits a non-linear relationship with testing accuracy.
+
+\begin{figure*}[ht!]
+    \begin{tabular}{cc}
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/their_table.png} &
+        \includegraphics[trim=0 0 0 0, clip,
+            width=3.25in]{images/our_table.png} \\
+        Author's Results & Our Results \\
+    \end{tabular}
+    \caption{Full experimental results. Includes testing learning rate min/max values for CLR.}
+    \label{fig:table}
+\end{figure*}
+
 %------------------------------------------------------------------------------
 
 \section{Conclusion}
@@ -158,7 +299,12 @@ benefits of large and cyclical learning rates rather than trying to reproduce
 may be an isolated phenomenon under different circumstances.
 
 \subsection{Cost of Reproduction}
-What cost in terms of resources (computation, time, people, development effort, communication with the authors).
+What cost in terms of resources (computation, time, people, development effort,
+communication with the authors).
+
+Talk about how this method isn't very useful because it only works on: Cifar,
+ResNets, large batch sizes. Discuss the impact of the paper (which is very
+low).
 
 {\small
 \bibliographystyle{ieee}
