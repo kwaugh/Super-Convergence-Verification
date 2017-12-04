@@ -51,15 +51,45 @@ University of Texas at Austin\\
 %%%%%%%%% ABSTRACT
 \begin{abstract}
 In this paper, we aim to evaluate the reproducibility of the experiments
-    detailed in the paper ``Super Convergence: Very Fast Training of Residual
+    detailed in the paper ``Super-Convergence: Very Fast Training of Residual
     Networks Using Large Learning Rates'' \cite{SuperConvergence}
 \end{abstract}
 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
-Paul
+In an ICLR 2018 submission, the anonymous authors of \cite{SuperConvergence}
+show that under certain training conditions, a phenomenon called
+``super-convergence'' can be achieved, where ResNets \cite{ResNet} can be
+trained an order of magnitude more quickly than when using normal training
+methods.  Super-convergence simply requires using a cyclical learning rate
+(CLR) versus the standard piecewise constant learning rate (PCLR). When using
+the CLR method, the learning rate is slowly increased for a minimum learning
+rate to a maximum learning rate, then slowly decreased back to the minimum
+learning rate again, after which training stops.
+
+The authors run a variety of experiments to see under what circumstances
+super-convergence can be achieved with the CLR method. Using Cifar-10 and
+Cifar-100 \cite{Cifar}, ImageNet \cite{ImageNet} and a variety of network
+architectures, they were only able to induce super-convergence on Cifar-10 and
+Cifar-100 using ResNet, and not at all on ImageNet.
+
+There is still a significant amount of work to be done on investigating
+super-convergence. It is still unclear when it can occur and if it can be
+induced in a deterministic manner in other circumstances. In this paper we
+investigate the current known quantities of super-convergence and attempt to
+reproduce them.
 
 \subsection{Target Questions}
+We seek to reproduce the key experiments in \cite{SuperConvergence} and confirm
+most significant claims made by the authors. Specifically, we aim to:
+\begin{itemize}
+    \item Confirm the existence of the super-convergence phenomenon
+    \item Verify that super-convergence is superior to the PCLR method with
+        limited training examples
+    \item Verify the reported accuracy trends of using varying step sizes,
+        learning rate ranges, and iterations for the CLR method
+    \item 
+\end{itemize}
 %------------------------------------------------------------------------------
 
 \section{Method}
