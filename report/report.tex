@@ -295,16 +295,15 @@ such a large batch size. However, the general trends should and do still hold.
 
 We believe that circumstances under which super-convergence occurs are too
 limited to be considered useful and surmise that further investigation into the
-benefits of large and cyclical learning rates rather than trying to reproduce
-may be an isolated phenomenon under different circumstances.
+benefits of large and cyclical learning rates will be more useful than trying
+to reproduce may be an isolated phenomenon under different circumstances.
 
 \subsection{Cost of Reproduction}
-What cost in terms of resources (computation, time, people, development effort,
-communication with the authors).
-
-Talk about how this method isn't very useful because it only works on: Cifar,
-ResNets, large batch sizes. Discuss the impact of the paper (which is very
-low).
+Each experiment took about 4 hours to run on an Nvidia GTX 1070 GPU. We did not
+encounter too many difficulties implementing CLR, except that we were unable to
+successfully train our network on TACC as it has an older version of
+TensorFlow, making debugging compatibility issues difficult. No communication
+with the authors was necessary in order to reproduce the experiments.
 
 {\small
 \bibliographystyle{ieee}
