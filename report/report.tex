@@ -277,15 +277,15 @@ this ratio exhibits a non-linear relationship with testing accuracy.
 
 \section{Conclusion}
 \label{sec:conclusion}
-We confirm the existence of the ``super-convergence'' phenomenon under the
-circumstances given by the authors: ResNets can be trained an order of
-magnitude more quickly on Cifar 10 and Cifar 100 using large, cyclical learning
-rates. Unlike the authors, however, we find that the accuracy achieved using
-this method is below that of using a piecewise-constant learning rate. In
-addition, we find that the CLR method is not superior to the PCLR method when
-limited training data is used, contrary to the authors' experiments. When
-adjusting step-size, learning rate range, and number of iterations, we observe
-trends similar to those of the authors.
+Overall we achieve similar but less pronounced results to the authors in our
+training. We do find that ResNets can be trained on Cifar 10 and 100 using
+large, cyclical learning rates faster than piecewise-constant learning rates by
+nature of training ending early when using CLR.  Unlike the authors, however,
+we find that the accuracy achieved using this method is below that of using a
+piecewise-constant learning rate. In addition, we find that the CLR method is
+not superior to the PCLR method when limited training data is used, contrary to
+the authors' experiments. When adjusting step-size, learning rate range, and
+number of iterations, we observe trends similar to those of the authors.
 
 The discrepancy in peak accuracy between our super-convergence experiments and
 those of the authors may be attributable to the very large batch size of 1000
