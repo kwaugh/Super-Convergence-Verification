@@ -53,14 +53,14 @@ University of Texas at Austin\\
 \begin{abstract}
 In this paper, we aim to evaluate the reproducibility of the experiments
     detailed in the paper ``Super-Convergence: Very Fast Training of Residual
-    Networks Using Large Learning Rates'' \cite{SuperConvergence}
+    Networks Using Large Learning Rates'' \cite{SuperConvergence}.
 \end{abstract}
 
 %%%%%%%%% BODY TEXT
 \section{Introduction}
 In an ICLR 2018 submission, the anonymous authors of \cite{SuperConvergence}
 show that under certain training conditions, a phenomenon called
-``super-convergence'' can be achieved, where ResNets \cite{ResNet} can be
+``super-convergence'' (SC) can be achieved, where ResNets \cite{ResNet} can be
 trained an order of magnitude more quickly than when using normal training
 methods.  Super-convergence simply requires using a cyclical learning rate
 (CLR), proposed by L. Smith \cite{CLR}, versus the standard piecewise constant
@@ -87,6 +87,7 @@ We seek to reproduce the key experiments in \cite{SuperConvergence} and confirm
 most significant claims made by the authors. Specifically, we aim to:
 \begin{itemize}
     \item Confirm the existence of the super-convergence phenomenon
+    \item Show that SC occurs on various ResNet depths
     \item Verify that super-convergence is superior to the PCLR method with
         limited training examples
     \item Verify the reported accuracy trends of using varying step sizes,
@@ -98,17 +99,7 @@ most significant claims made by the authors. Specifically, we aim to:
 \label{sec:method}
 Due to time and hardware constraints (lack of multiple GPUs), we were unable to
 replicate all of the experiments that were listed in the paper. Therefore, we
-had to choose which experiments from which we could glean the most. It was our
-goal to show the existence or not of the following claims made in the paper.
-Super-convergence:
-\begin{itemize}
-    \item allows the network to achieve higher test accuracy than traditional
-        piece-wise constant learning rates (PCLR)
-    \item requires an order of magnitude fewer iterations to converge than PCLR
-    \item is more noticeable with fewer training examples
-    \item works with various ResNet sizes
-    \item works best with a certain step size
-\end{itemize}
+had to choose which experiments from which we could glean the most.
 
 When available, we used the hyperparameters that the authors listed in their
 paper. When these were omitted, we attempted to use standard values that are
@@ -118,7 +109,7 @@ used on Cifar-10 and ResNets.
 In the ICLR submitted paper, the authors mentioned that they would release
 their code upon acceptance to the conference. However, upon Googling the paper
 name, we found an arXiv version of the paper that links to the authors' source
-code on GitHub. We chose to not look at this code and reimplement their
+code on GitHub. We chose to not look at this code and to reimplement their
 solution so that we could test the reproducibility under the information
 that was listed in the ICLR paper.
 
@@ -133,14 +124,16 @@ restricted to a batch size of 256. The authors found that increasing the batch
 size significantly improved the performance of their CLR tests, so the
 discrepancy between our results and the authors could be due to this. It was
 unclear from the paper whether these large batch size were used with their PCLR
-test as well.
+test as well. If they were not used with PCLR, then this could explain why CLR
+has an advantage in all of their tests.
+
 
 %------------------------------------------------------------------------------
 
 \section{Experiments}
-All experiments were run on a single machine with a quad core Intel Core i5
-processor, 16GB of RAM, and an Nvidia GTX 1070 GPU. The effect of batch sizes
-on our results will be discussed in section \ref{sec:conclusion}.
+All experiments were run on a single machine with a quad-core Intel Core i5
+processor, 16GB of RAM, and an Nvidia GeForce GTX 1070 GPU. The effect of batch
+sizes on our results will be discussed in section \ref{sec:conclusion}.
 
 \subsection{Existence of Super-Convergence}
 \label{sec:existence_of_super_convergence}
@@ -150,7 +143,7 @@ blue line that one of the CLR runs did peak and achieve better results than
 PCLR with fewer iterations. However, the PCLR run achieved a higher final
 accuracy on the test set, unlike what the authors reported. Additionally, the
 CLR test was repeated with the same hyperparameters, but given the same number
-of iterations as the PCLR test(green line). It achieved significantly worse
+of iterations as the PCLR test (green line). It achieved significantly worse
 accuracy than the other two tests. Interestingly, the green run also had worse
 accuracy than the blue run in the first ten thousand iterations, which suggests
 that super-convergence is highly sensitive to the initial weight initialization
