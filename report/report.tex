@@ -63,12 +63,12 @@ show that under certain training conditions, a phenomenon called
 ``super-convergence'' can be achieved, where ResNets \cite{ResNet} can be
 trained an order of magnitude more quickly than when using normal training
 methods.  Super-convergence simply requires using a cyclical learning rate
-(CLR) versus the standard piecewise constant learning rate (PCLR). When using
-the CLR method, the learning rate is slowly increased from a minimum learning
-rate to a maximum learning rate, then slowly decreased back to the minimum
-learning rate again, after which training stops. The number of iterations taken
-to go from the minimum learning rate to the maximum and vice versa is referred
-to as the step-size and is a hyperparameter.
+(CLR), proposed by L. Smith \cite{CLR}, versus the standard piecewise constant
+learning rate (PCLR). When using the CLR method, the learning rate is slowly
+increased from a minimum learning rate to a maximum learning rate, then slowly
+decreased back to the minimum learning rate again, after which training stops.
+The number of iterations taken to go from the minimum learning rate to the
+maximum and vice versa is referred to as the step-size and is a hyperparameter.
 
 The authors run a variety of experiments to see under what circumstances
 super-convergence can be achieved with the CLR method. Using Cifar-10 and
